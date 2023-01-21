@@ -6,35 +6,23 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
-    //Player n: Please choose your field! - Active player will choose the field!
-    //Please pick a new field - incorrect input! please use another field! - If player enters the already picked field!
-    //Please enter a number! - incorrect input! please use another field! - If player enters any other value except the integers!
-    //Player n has won! - If any player wins either horizontally, vertically or diagonally at first!
-    // -- Press Y to reset the game or N to leave the game.
+    // BASIC MECHANICS OF TIC TAC TOE GAME - (No restart functionality.)
     class Program
     {
         //-------START--------
-
         static char[,] playField =
         {
             {'1','2','3'},
             {'4','5','6'},
             {'7','8','9'}
         };
-        static char[,] playFieldInitial =
-        {
-            {'1','2','3'},
-            {'4','5','6'},
-            {'7','8','9'}
-        };
         static int turns = 0;
-
+        static int player = 2;
         static void Main(string[] args)
         {
             
             bool gameActive = true;
-            char inputField = '0';
-            int player = 2;
+            char inputField = '0'; 
             bool isFieldAvailable = true;
             bool winnerChecker = false;
             
@@ -50,7 +38,7 @@ namespace TicTacToe
                     if (inputField == '0' || char.IsDigit(inputField) == false)
                     {
                         Console.WriteLine("Please enter a valid input field from 1 to 9!");
-                        player = CurrentActivePlayer(player); // reset the player to the current player
+                        player = CurrentActivePlayer(player); //Reset the player to the current player
                         Console.ReadKey();
                     }
                     else
@@ -62,7 +50,7 @@ namespace TicTacToe
                         }
                         else
                         {
-                            player = CurrentActivePlayer(player); // reset the player to the current player
+                            player = CurrentActivePlayer(player); //Reset the player to the current player
                             Console.WriteLine("Selected field has already been taken - Please use another field!");        
                             Console.ReadKey(); 
                         }
@@ -75,33 +63,26 @@ namespace TicTacToe
                     Console.ReadKey();
                 }
 
-                winnerChecker = WinnerChecker();
+                winnerChecker = WinnerChecker(); 
 
-                if (winnerChecker == true)
+                if (winnerChecker == true) //If any player wins.
                 {
                     DisplayPlayerField();
                     Console.WriteLine("Player {0} has won the game!", player);
-                    gameActive = false;
-                    Console.Write("Press 'y' to restart the game ");
-                    gameActive = Restart(Convert.ToChar(Console.ReadLine()));
-                    if (gameActive) { ResetPlayField(); player = CurrentActivePlayer(player);}                   
+                    Console.ReadKey();
+                    gameActive = false;                
                 }
-                else if (turns >= 9)
+                else if (turns >= 9) //If it's a tie game.
                 {
                     DisplayPlayerField();
                     Console.WriteLine("It's a tie!");
+                    Console.ReadKey();
                     gameActive = false;
-                    Console.Write("Press 'y' to restart the game ");
-                    gameActive = Restart(Convert.ToChar(Console.ReadLine()));
-                    if (gameActive) { ResetPlayField(); player = CurrentActivePlayer(player);}                    
-                }
-                
+                }               
             } while (gameActive);
-
         }
-
-        //Display the Player Field!
-        static void DisplayPlayerField()
+ 
+        static void DisplayPlayerField() //Display the Player Field!
         {
             Console.Clear();
             Console.WriteLine("TIC TAC TOE\n");
@@ -121,9 +102,9 @@ namespace TicTacToe
             }
         }
 
-        static int CurrentActivePlayer(int player)
+        static int CurrentActivePlayer(int player) //Set the current active player as per the resepective player's turn.
         {
-            if (player == 2) //Player 1 starts as per the condition on first run
+            if (player == 2) //Player 1 starts as per the condition on first run.
                 player = 1;
             else if (player == 1)
                 player = 2;
@@ -131,7 +112,7 @@ namespace TicTacToe
         }
 
 
-        static void UpdatePlayerField(char inputField, int player)
+        static void UpdatePlayerField(char inputField, int player) //Update the playerfield to display the game progress.
         {
             for (int i = 0; i < playField.GetLength(0); i++)
             {
@@ -150,7 +131,7 @@ namespace TicTacToe
             turns++;
         }
 
-        static bool CheckPlayerField(char inputField)
+        static bool CheckPlayerField(char inputField) //Check the available player field for players.
         {
             bool isFieldAvailable = true;
 
@@ -178,7 +159,7 @@ namespace TicTacToe
             return isFieldAvailable;
         }
 
-        static bool WinnerChecker()
+        static bool WinnerChecker() //Check the winner of the game.
         {
             for (int i = 0; i < playField.GetLength(0); i++)
             {
@@ -193,23 +174,6 @@ namespace TicTacToe
                 return true;
             return false;
         }
-
-        static bool Restart(char input)
-        { 
-            bool gameActive = false;
-            if (input == 'y' || input == 'Y')
-                gameActive = true;
-            else
-                gameActive = false;
-            return gameActive;
-        }
-        static void ResetPlayField()
-        {
-            Console.Clear();
-            playField = playFieldInitial;
-            turns = 0; 
-        }
-
         //-------END--------
     }
 }
